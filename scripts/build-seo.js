@@ -12,17 +12,23 @@ const { generateSitemap, generateRobotsTxt } = await import('../src/utils/seo.ts
 // Generate SEO files
 function generateSEOFiles() {
   try {
-    // Generate sitemap
     const sitemap = generateSitemap();
-    fs.writeFileSync(path.join(__dirname, '../dist/sitemap.xml'), sitemap);
-    
-    // Generate robots.txt
     const robots = generateRobotsTxt();
-    fs.writeFileSync(path.join(__dirname, '../dist/robots.txt'), robots);
-    
+    const distDir = path.join(__dirname, '../dist');
+    const publicDir = path.join(__dirname, '../public');
+
+    if (!fs.existsSync(distDir)) {
+      fs.mkdirSync(distDir, { recursive: true });
+    }
+
+    fs.writeFileSync(path.join(distDir, 'sitemap.xml'), sitemap);
+    fs.writeFileSync(path.join(distDir, 'robots.txt'), robots);
+    fs.writeFileSync(path.join(publicDir, 'sitemap.xml'), sitemap);
+    fs.writeFileSync(path.join(publicDir, 'robots.txt'), robots);
+
     console.log('✅ SEO files generated successfully!');
     console.log('📅 Date:', new Date().toISOString().split('T')[0]);
-    console.log('📁 Files: sitemap.xml, robots.txt');
+    console.log('📁 Files: public/{sitemap.xml,robots.txt}, dist/{sitemap.xml,robots.txt}');
   } catch (error) {
     console.error('❌ Error generating SEO files:', error);
     process.exit(1);

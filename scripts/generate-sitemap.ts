@@ -1,61 +1,38 @@
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
+import { generateRobotsTxt, generateSitemap } from '../src/utils/seo.ts';
 
 /**
- * Générateur simple de sitemap.xml
+ * Écrit sitemap.xml depuis src/utils/seo.ts (source unique).
  *
- * Usage:
- *  - NODE_ENV=production BASE_URL="https://www.example.com" npx ts-node scripts/generate-sitemap.ts
- *  - Ou compiler/transpiler et exécuter avec node
- *
- * Modifie la liste `routes` ci-dessous ou connecte-la à ton système de routage / CMS.
+ * Usage: npm run generate:sitemap
  */
 
-const BASE_URL = process.env.BASE_URL || 'https://www.abderrahmane-elfarouahfreelance.com';
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const rootDir = path.resolve(__dirname, '..');
 
-// Liste des routes à inclure dans le sitemap
-// Priorités ajustées selon la navigation principale : Accueil > Services > Réalisations > Contact
-const routes: Array<{ url: string; priority?: number; lastmod?: string }> = [
-  { url: '/', priority: 1.0 },
-  { url: '/services', priority: 0.9 },
-  { url: '/projects', priority: 0.9 },
-  { url: '/contact', priority: 0.9 },
-  { url: '/about', priority: 0.6 }, // Page secondaire (non dans nav principale)
-  { url: '/experience', priority: 0.5 },
-  { url: '/mentions-legales', priority: 0.3 },
-  { url: '/cgv', priority: 0.3 },
-];
-
-// Format date YYYY-MM-DD
-const today = new Date().toISOString().split('T')[0];
-
-function buildUrlEntry(route: { url: string; priority?: number; lastmod?: string }) {
-  const loc = `${BASE_URL.replace(/\/$/, '')}${route.url}`;
-  const lastmod = route.lastmod || today;
-  const priority = (typeof route.priority === 'number') ? route.priority.toFixed(1) : '0.5';
-  return `  <url>\n    <loc>${loc}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <priority>${priority}</priority>\n  </url>`;
-}
-
-function buildSitemap(routesList: typeof routes) {
-  const header = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
-  const footer = '\n</urlset>\n';
-  const body = routesList.map(buildUrlEntry).join('\n');
-  return header + body + footer;
-}
-
-function writeSitemap(sitemapXml: string) {
-  const outDir = path.resolve(process.cwd(), 'public');
-  if (!fs.existsSync(outDir)) {
-    fs.mkdirSync(outDir, { recursive: true });
+function writeIfDirExists(dir: string, filename: string, content: string) {
+  if (!fs.existsSync(dir)) {
+    return false;
   }
-  const outPath = path.join(outDir, 'sitemap.xml');
-  fs.writeFileSync(outPath, sitemapXml, { encoding: 'utf8' });
-  console.log(`✅ sitemap.xml généré dans ${outPath}`);
+  const outPath = path.join(dir, filename);
+  fs.writeFileSync(outPath, content, { encoding: 'utf8' });
+  console.log(`✅ ${filename} écrit dans ${outPath}`);
+  return true;
 }
 
 function main() {
-  const sitemap = buildSitemap(routes);
-  writeSitemap(sitemap);
+  const sitemap = generateSitemap();
+  const robots = generateRobotsTxt();
+  const publicDir = path.join(rootDir, 'public');
+  if (!fs.existsSync(publicDir)) {
+    fs.mkdirSync(publicDir, { recursive: true });
+  }
+  writeIfDirExists(publicDir, 'sitemap.xml', sitemap);
+  writeIfDirExists(publicDir, 'robots.txt', robots);
+  writeIfDirExists(path.join(rootDir, 'dist'), 'sitemap.xml', sitemap);
+  writeIfDirExists(path.join(rootDir, 'dist'), 'robots.txt', robots);
 }
 
 main();

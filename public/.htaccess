@@ -50,26 +50,15 @@
     Header always set X-Geo-City "Mantes-la-Jolie"
 </IfModule>
 
-# Redirections SEO améliorées
-# Redirection 301 de contact vers l'accueil (car contact redirige vers home)
-RedirectMatch 301 ^/contact/?$ https://www.abderrahmane-elfarouahfreelance.com/
-
-# Redirections pour variations d'URL (optimisation SEO)
+# Redirections SEO
 # Forcer WWW pour éviter le contenu dupliqué
 RewriteEngine On
 RewriteCond %{HTTP_HOST} ^abderrahmane-elfarouahfreelance\.com [NC]
 RewriteRule ^(.*)$ https://www.%{HTTP_HOST}/$1 [R=301,L]
 
-# Redirections pour anciennes URLs (si applicable)
-# Décommentez et adaptez selon vos besoins
-# RedirectMatch 301 ^/ancien-service/?$ /services
+# Anciennes URLs (à activer seulement si elles existaient vraiment)
 # RedirectMatch 301 ^/portfolio/?$ /projects
 # RedirectMatch 301 ^/a-propos/?$ /about
-
-# Gestion uniforme des slashes finaux
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_URI} !(.*)/$
-RewriteRule ^(.*)$ https://www.abderrahmane-elfarouahfreelance.com/$1/ [R=301,L]
 
 # Forcer le HTTPS (recommandé pour la production)
 <IfModule mod_rewrite.c>

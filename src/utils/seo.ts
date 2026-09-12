@@ -1,3 +1,5 @@
+import { BLOG_ARTICLES } from '../data/blog-articles';
+
 const baseUrl = 'https://www.abderrahmane-elfarouahfreelance.com';
 
 /** Routes du sitemap — source unique (build Vercel aligné) */
@@ -6,8 +8,8 @@ export const SITEMAP_ROUTES = [
   { path: '/services', priority: '0.9', changeFreq: 'weekly' },
   { path: '/projects', priority: '0.9', changeFreq: 'weekly' },
   { path: '/contact', priority: '0.9', changeFreq: 'weekly' },
-  { path: '/faq', priority: '0.8', changeFreq: 'monthly' }, // Featured snippets
-  { path: '/zones-intervention', priority: '0.8', changeFreq: 'monthly' }, // SEO local
+  { path: '/faq', priority: '0.8', changeFreq: 'monthly' },
+  { path: '/zones-intervention', priority: '0.8', changeFreq: 'monthly' },
   { path: '/about', priority: '0.6', changeFreq: 'monthly' },
   { path: '/experience', priority: '0.5', changeFreq: 'monthly' },
   { path: '/mentions-legales', priority: '0.3', changeFreq: 'yearly' },
@@ -17,11 +19,11 @@ export const SITEMAP_ROUTES = [
   { path: '/creation-site-web-yvelines', priority: '0.8', changeFreq: 'monthly' },
   { path: '/applications-web-sur-mesure', priority: '0.8', changeFreq: 'monthly' },
   { path: '/blog', priority: '0.8', changeFreq: 'monthly' },
-  { path: '/blog/pourquoi-angular-application-metier', priority: '0.7', changeFreq: 'monthly' },
-  { path: '/blog/laravel-vs-nodejs-quel-choisir', priority: '0.7', changeFreq: 'monthly' },
-  { path: '/blog/combien-coute-developpeur-freelance', priority: '0.7', changeFreq: 'monthly' },
-  { path: '/blog/creer-application-web-sur-mesure', priority: '0.7', changeFreq: 'monthly' },
-  { path: '/blog/seo-technique-optimiser-react', priority: '0.7', changeFreq: 'monthly' },
+  ...BLOG_ARTICLES.map((article) => ({
+    path: `/blog/${article.slug}`,
+    priority: '0.7',
+    changeFreq: 'monthly',
+  })),
 ] as const;
 
 const routes = SITEMAP_ROUTES;
@@ -43,21 +45,26 @@ ${routes.map(route => `  <url>
 }
 
 export function generateRobotsTxt() {
-  return `User-agent: *
+  return `# Priorité pour les moteurs de recherche importants
+User-agent: *
 Allow: /
 Allow: /site-version.txt
 Allow: /site-version.json
+Crawl-delay: 1
 
-# Priorité pour les moteurs de recherche importants
+# Googlebot - optimisations spécifiques
 User-agent: Googlebot
 Allow: /
 Allow: /site-version.txt
 Allow: /site-version.json
+Crawl-delay: 0.5
 
+# Bingbot - optimisations spécifiques
 User-agent: Bingbot
 Allow: /
 Allow: /site-version.txt
 Allow: /site-version.json
+Crawl-delay: 1
 
 # Bloquer les bots non désirés
 User-agent: AhrefsBot
@@ -69,18 +76,33 @@ Disallow: /
 User-agent: DotBot
 Disallow: /
 
-# Fichiers à ne pas indexer
-Disallow: /admin/
-Disallow: /api/
+User-agent: SemrushBot
+Disallow: /
 
-# Fichiers SEO (explicitement autorisés)
+User-agent: BLEXBot
+Disallow: /
+
+# Fichiers et dossiers à ne pas indexer
+Disallow: /src/
+Disallow: /node_modules/
+Disallow: /dist/
+Disallow: /vite.config.*
+Disallow: /admin/
+Disallow: /.well-known/
+Disallow: /api/
+Disallow: /404.html
+
+# Fichiers SEO
 Allow: /sitemap.xml
 Allow: /geo-sitemap.xml
 Allow: /robots.txt
+Allow: /manifest.json
+Allow: /local-business.json
+Allow: /site-version.txt
+Allow: /site-version.json
 
+# Indiquer le plan du site (sitemap)
 Sitemap: ${baseUrl}/sitemap.xml
 Sitemap: ${baseUrl}/geo-sitemap.xml
-
-# Délai de crawl (crawl-delay)
-Crawl-delay: 1`;
+`;
 }

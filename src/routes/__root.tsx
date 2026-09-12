@@ -34,6 +34,9 @@ function RootComponent() {
   return (
     <HelmetProvider>
       <SEO />
+      <a href="#main-content" className="skip-link">
+        Aller au contenu principal
+      </a>
       <div className="page-shell flex flex-col min-h-screen w-full mx-auto transition-all duration-300 ease-out p-3 sm:p-4 md:p-6 lg:p-8">
         <header role="banner">
           <Navbar />

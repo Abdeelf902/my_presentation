@@ -6,27 +6,28 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build && node vercel-build.js",
+     "postbuild": "react-snap",
     "build:seo": "tsx build.ts",
     "preview": "vite preview",
     "lint": "eslint .",
     "vercel-build": "npm run build",
     "audit:check": "npm audit --audit-level=moderate"
   },
-  "reactSnap": {
-    "source": "dist",
-    "inlineCss": true,
-    "destination": "dist",
-    "include": [
-      "/",
-      "/about",
-      "/services",
-      "/projects",
-      "/experience",
-      "/contact",
-      "/faq",
-      "/zones-intervention",
-      "/mentions-legales",
-      "/cgv"
+ "reactSnap": {
+  "source": "dist",
+  "inlineCss": true,
+  "destination": "dist",
+  "include": [
+    "/", "/about", "/services", "/projects", "/experience",
+    "/contact", "/faq", "/zones-intervention", "/mentions-legales", "/cgv",
+    "/developpeur-angular-freelance", "/developpeur-laravel-freelance",
+    "/creation-site-web-yvelines", "/applications-web-sur-mesure",
+    "/blog",
+    "/blog/pourquoi-angular-application-metier",
+    "/blog/laravel-vs-nodejs-quel-choisir",
+    "/blog/combien-coute-developpeur-freelance",
+    "/blog/creer-application-web-sur-mesure",
+    "/blog/seo-technique-optimiser-react"
     ]
   },
   "dependencies": {

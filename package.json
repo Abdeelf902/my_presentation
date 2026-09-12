@@ -72,10 +72,10 @@
     "vite-plugin-prerender": "^1.0.8"
   },
   "overrides": {
+  "node-fetch": "^3.3.2",
+  "@vercel/node": {
     "node-fetch": "^3.3.2",
-    "path-to-regexp": "^8.0.0",
-    "@vercel/node": {
-      "node-fetch": "^3.3.2"
+    "path-to-regexp": "^8.0.0"
     }
   }
 }

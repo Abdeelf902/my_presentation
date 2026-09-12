@@ -1,4 +1,4 @@
-import { BLOG_ARTICLES } from '../data/blog-articles.ts';
+import { BLOG_ARTICLES } from '../data/blog-articles';
 
 const baseUrl = 'https://www.abderrahmane-elfarouahfreelance.com';
 

@@ -6,7 +6,6 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build && node vercel-build.js",
-    "postbuild": "react-snap",
     "build:seo": "node scripts/build-seo.js",
     "generate:sitemap": "npx tsx scripts/generate-sitemap.ts",
     "preview": "vite preview",

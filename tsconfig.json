@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": "./src",  // Set baseUrl to ./src for absolute imports
+    "baseUrl": "./src",
     "paths": {
       "*": ["*"]
     }

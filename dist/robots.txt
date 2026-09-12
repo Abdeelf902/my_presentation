@@ -1,18 +1,23 @@
+# Priorité pour les moteurs de recherche importants
 User-agent: *
 Allow: /
 Allow: /site-version.txt
 Allow: /site-version.json
+Crawl-delay: 1
 
-# Priorité pour les moteurs de recherche importants
+# Googlebot - optimisations spécifiques
 User-agent: Googlebot
 Allow: /
 Allow: /site-version.txt
 Allow: /site-version.json
+Crawl-delay: 0.5
 
+# Bingbot - optimisations spécifiques
 User-agent: Bingbot
 Allow: /
 Allow: /site-version.txt
 Allow: /site-version.json
+Crawl-delay: 1
 
 # Bloquer les bots non désirés
 User-agent: AhrefsBot
@@ -24,17 +29,31 @@ Disallow: /
 User-agent: DotBot
 Disallow: /
 
-# Fichiers à ne pas indexer
-Disallow: /admin/
-Disallow: /api/
+User-agent: SemrushBot
+Disallow: /
 
-# Fichiers SEO (explicitement autorisés)
+User-agent: BLEXBot
+Disallow: /
+
+# Fichiers et dossiers à ne pas indexer
+Disallow: /src/
+Disallow: /node_modules/
+Disallow: /dist/
+Disallow: /vite.config.*
+Disallow: /admin/
+Disallow: /.well-known/
+Disallow: /api/
+Disallow: /404.html
+
+# Fichiers SEO
 Allow: /sitemap.xml
 Allow: /geo-sitemap.xml
 Allow: /robots.txt
+Allow: /manifest.json
+Allow: /local-business.json
+Allow: /site-version.txt
+Allow: /site-version.json
 
+# Indiquer le plan du site (sitemap)
 Sitemap: https://www.abderrahmane-elfarouahfreelance.com/sitemap.xml
 Sitemap: https://www.abderrahmane-elfarouahfreelance.com/geo-sitemap.xml
-
-# Délai de crawl (crawl-delay)
-Crawl-delay: 1

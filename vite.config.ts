@@ -6,6 +6,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { execSync } from 'child_process';
+import prerenderPlugin from './scripts/prerender';
 
 // Get current directory
 const __filename = fileURLToPath(import.meta.url);
@@ -146,7 +147,10 @@ export default defineConfig({
       closeBundle() {
         writeSiteVersionFiles();
       }
-    }
+    },
+    // 🆕 Native SSR prerender plugin - replaces react-snap
+    // Generates static HTML files for each route with unique SEO metadata
+    prerenderPlugin(),
   ],
   define: {
     __SITE_BUILD_INFO__: JSON.stringify(siteBuildInfo),

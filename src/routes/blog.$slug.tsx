@@ -1,4 +1,6 @@
+import { useEffect } from 'react';
 import { createFileRoute, Link } from '@tanstack/react-router';
+import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Calendar, User } from 'lucide-react';
 import Container from '../components/shared/Container';
@@ -201,6 +203,51 @@ const articlesData: Record<string, BlogArticleData> = {
   },
 };
 
+const ADSENSE_CLIENT = 'ca-pub-5921232882242644';
+const ADSENSE_TOP_SLOT = '8561894521';
+const ADSENSE_BOTTOM_SLOT = '8561894521';
+
+function AdSenseBlock({ slot }: { slot: string }) {
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const win = window as typeof window & {
+        adsbygoogle?: unknown[];
+      };
+      win.adsbygoogle = win.adsbygoogle || [];
+      win.adsbygoogle.push({});
+    }
+  }, []);
+
+  return (
+    <motion.aside
+      className="my-12 overflow-hidden rounded-2xl border border-[#dfe3e8] bg-[#f7f9fa] p-3 shadow-sm dark:border-slate-700 dark:bg-slate-900"
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      aria-label="Publicité Google Ads"
+    >
+      <div className="mb-2 flex items-center justify-between gap-3 text-[10px] font-medium uppercase tracking-[0.2em] text-text-muted">
+        <div className="flex items-center gap-2">
+          <span className="inline-flex items-center rounded bg-[#1a73e8] px-2 py-0.5 text-[10px] font-bold uppercase text-white">
+            Ad
+          </span>
+          <span>Google Ads</span>
+        </div>
+        <span>Sponsored</span>
+      </div>
+
+      <ins
+        className="adsbygoogle"
+        style={{ display: 'block', width: '100%', minHeight: '120px' }}
+        data-ad-client={ADSENSE_CLIENT}
+        data-ad-slot={slot}
+        data-ad-format="auto"
+        data-full-width-responsive="true"
+      />
+    </motion.aside>
+  );
+}
+
 function BlogArticle() {
   const { slug } = Route.useParams();
   const article = articlesData[slug];
@@ -220,7 +267,17 @@ function BlogArticle() {
   }
 
   return (
-    <div className="min-h-screen page-shell prose-premium">
+    <>
+      <Helmet>
+        <meta name="google-adsense-account" content={ADSENSE_CLIENT} />
+        <script
+          async
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
+          crossOrigin="anonymous"
+        />
+      </Helmet>
+
+      <div className="min-h-screen page-shell prose-premium">
         <Container className="py-12 md:py-16 max-w-3xl">
           <Link
             to="/blog"
@@ -272,6 +329,8 @@ function BlogArticle() {
               {article.intro}
             </p>
 
+            <AdSenseBlock slot={ADSENSE_TOP_SLOT} />
+
             <div className="space-y-12">
               {article.sections.map((section) => (
                 <section key={section.heading}>
@@ -304,6 +363,8 @@ function BlogArticle() {
                 {article.conclusion}
               </p>
             </div>
+
+            <AdSenseBlock slot={ADSENSE_BOTTOM_SLOT} />
           </motion.article>
 
           <motion.div
@@ -327,6 +388,7 @@ function BlogArticle() {
           </motion.div>
         </Container>
       </div>
+    </>
   );
 }
 
